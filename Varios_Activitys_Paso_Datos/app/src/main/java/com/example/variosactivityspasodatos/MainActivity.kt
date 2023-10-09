@@ -21,6 +21,8 @@ class MainActivity : AppCompatActivity() {
 
     fun cambiarVentana(){
         var miIntent: Intent = Intent(this, Ventana2::class.java)
+        miIntent.putExtra("nombre", binding.cajaNombre.text.toString())
+        miIntent.putExtra("edad", binding.cajaEdad.text.toString())
         startActivity(miIntent)
     }
 }
