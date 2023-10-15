@@ -72,6 +72,7 @@
         app:layout_constraintVertical_bias="0.167" />
 
     <RadioGroup
+        android:id="@+id/rgRadioGroup"
         android:layout_width="212dp"
         android:layout_height="163dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -211,7 +212,7 @@
         app:layout_constraintVertical_bias="0.805" />
 
     <Button
-        android:id="@+id/btnValidar4"
+        android:id="@+id/btnResumen"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:backgroundTint="#193BF3"
@@ -225,7 +226,7 @@
         app:layout_constraintVertical_bias="0.805" />
 
     <Button
-        android:id="@+id/btnValidar2"
+        android:id="@+id/btnReiniciar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:backgroundTint="#193BF3"
@@ -239,7 +240,7 @@
         app:layout_constraintVertical_bias="0.805" />
 
     <Button
-        android:id="@+id/btnValidar3"
+        android:id="@+id/btnCuantas"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:backgroundTint="#193BF3"
@@ -253,17 +254,19 @@
         app:layout_constraintVertical_bias="0.805" />
 
     <EditText
-        android:id="@+id/editTextTextMultiLine"
-        android:layout_width="411dp"
-        android:layout_height="128dp"
+        android:id="@+id/edmEncuestas"
+        android:layout_width="363dp"
+        android:layout_height="113dp"
         android:ems="10"
+        android:cursorVisible="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
         android:gravity="start|top"
-        android:inputType="textMultiLine"
+        android:inputType="textMultiLine|textNoSuggestions"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.991" />
+        app:layout_constraintVertical_bias="0.974" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
