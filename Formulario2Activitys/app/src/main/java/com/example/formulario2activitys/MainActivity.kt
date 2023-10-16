@@ -46,6 +46,12 @@ class MainActivity : AppCompatActivity() {
             } else {
                 AlmacenUsuarios.aniadirUsuario(usuario)
                 cambiarVentana()
+                binding.edNombre.text.clear()
+                binding.edApellido.text.clear()
+                binding.edDni.text.clear()
+                binding.edGmail.text.clear()
+                binding.edContrasenia.text.clear()
+                binding.edConfirmacion.text.clear()
             }
         }
     }
