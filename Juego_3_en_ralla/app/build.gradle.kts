@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace = "com.example.juego_3_en_ralla"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.example.juego_3_en_ralla"
