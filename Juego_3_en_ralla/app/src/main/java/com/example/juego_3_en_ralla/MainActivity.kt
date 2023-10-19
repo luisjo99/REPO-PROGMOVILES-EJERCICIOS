@@ -13,6 +13,7 @@ class MainActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityMainBinding
     private var jugador = 0
+    private var contaempate = 0
     private var ganadasjug1 = 0
     private var ganadasjug2 = 0
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,13 +31,8 @@ class MainActivity : AppCompatActivity() {
                 binding.ivTurno.setImageResource(R.drawable.yas)
             }
             contador++
+            contaempate++
             imageView.setOnClickListener(null)
-
-                if (contador == 9) {
-                    binding.btnReinicio.visibility = Button.VISIBLE
-                    binding.btnRePartida.visibility = Button.VISIBLE
-                Toast.makeText(this, "¡EMPATE!", Toast.LENGTH_SHORT).show()
-            }
         }
 
         binding.iv11.setOnClickListener {
@@ -85,8 +81,8 @@ class MainActivity : AppCompatActivity() {
         }
 
         fun reinicio() {
-            contador = 0
             jugador = 0
+            contaempate = 0
             binding.btnRePartida.visibility = Button.INVISIBLE
             binding.btnReinicio.visibility = Button.INVISIBLE
             binding.iv11.setImageResource(R.drawable.grieta)
@@ -98,7 +94,6 @@ class MainActivity : AppCompatActivity() {
             binding.iv31.setImageResource(R.drawable.grieta)
             binding.iv32.setImageResource(R.drawable.grieta)
             binding.iv33.setImageResource(R.drawable.grieta)
-            binding.ivTurno.setImageResource(R.drawable.yas)
 
             binding.iv11.setOnClickListener { modificarImagen(binding.iv11)
                 verificarGanador()}
@@ -184,7 +179,6 @@ class MainActivity : AppCompatActivity() {
             binding.iv31.setOnClickListener(null)
             binding.iv32.setOnClickListener(null)
             binding.iv33.setOnClickListener(null)
-            jugador=0
         } else if (jugador == 2) {
             ganadasjug2++
             Toast.makeText(this, "¡GANA YONE!", Toast.LENGTH_SHORT).show()
@@ -200,7 +194,10 @@ class MainActivity : AppCompatActivity() {
             binding.iv31.setOnClickListener(null)
             binding.iv32.setOnClickListener(null)
             binding.iv33.setOnClickListener(null)
-            jugador=0
+        }else if (contaempate == 9 && jugador == 0) {
+            binding.btnReinicio.visibility = Button.VISIBLE
+            binding.btnRePartida.visibility = Button.VISIBLE
+            Toast.makeText(this, "¡EMPATE!", Toast.LENGTH_SHORT).show()
         }
     }
 }
