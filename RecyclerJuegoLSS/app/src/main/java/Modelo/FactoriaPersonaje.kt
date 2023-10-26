@@ -1,19 +1,17 @@
 package Modelo
 
-import android.R
-
-import android.graphics.drawable.Drawable
-import androidx.core.content.ContextCompat
-
+import kotlin.random.Random
 
 object FactoriaPersonaje {
-    fun generaPersonaje() : Personaje {
-        var nombres = listOf<String>("Yasuo", "Yone", "Fizz", "Khazix", "Viego")
-        var razas = listOf<String>("Orco", "Hombre", "Hobbit", "Elfo")
-        var imagenes = listOf<String>()
-
-        var yasuo = Personaje("Yasuo", "Mid", "Luchador", ContextCompat.getDrawable(this, R.drawable.yasuo))
-
-        return yasuo
+    fun generaPersonaje(): Personaje {
+        val personajes = listOf(
+            Personaje("Khazix", "Jungla", "Asesino", "khazix"),
+            Personaje("Viego", "Jungla", "Luchador", "viego"),
+            Personaje("Fizz", "Medio", "Asesino", "fizz"),
+            Personaje("Yone", "Medio", "Asesino", "yone"),
+            Personaje("Yasuo", "Medio", "Luchador", "yasuo")
+        )
+        val random = Random.nextInt(personajes.size)
+        return personajes[random]
     }
 }
