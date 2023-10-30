@@ -24,16 +24,7 @@ import com.example.recyclerjuegolss.R
 class MiAdaptadorRecycler (var personajes : ArrayList<Personaje>, var  context: Context) : RecyclerView.Adapter<MiAdaptadorRecycler.ViewHolder>(){
 
     companion object {
-        //Esta variable estática nos será muy útil para saber cual está marcado o no.
         var seleccionado:Int = -1
-        /*
-        PAra marcar o desmarcar un elemento de la lista lo haremos diferente a una listView. En la listView el listener
-        está en la activity por lo que podemos controlar desde fuera el valor de seleccionado y pasarlo al adapter, asociamos
-        el adapter a la listview y resuelto.
-        En las RecyclerView usamos para pintar cada elemento la función bind (ver código más abajo, en la clase ViewHolder).
-        Esto se carga una vez, solo una vez, de ahí la eficiencia de las RecyclerView. Si queremos que el click que hagamos
-        se vea reflejado debemos recargar la lista, para ello forzamos la recarga con el método: notifyDataSetChanged().
-         */
     }
 
 
@@ -53,15 +44,8 @@ class MiAdaptadorRecycler (var personajes : ArrayList<Personaje>, var  context: 
      *  Como su nombre indica lo que hará será devolvernos un objeto ViewHolder al cual le pasamos la celda que hemos creado.
      */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-//        val layoutInflater = LayoutInflater.from(parent.context)
-//        //return ViewHolder(layoutInflater.inflate(R.layout.item_lo,parent,false))
-//        return ViewHolder(layoutInflater.inflate(R.layout.item_card,parent,false))
-
-        //Este método infla cada una de las CardView
-
         val vista = LayoutInflater.from(parent.context).inflate(R.layout.item_card, parent, false)
         val viewHolder = ViewHolder(vista)
-        // Configurar el OnClickListener para pasar a la segunda ventana.
         viewHolder.itemView.setOnClickListener {
             val intent = Intent(context, MainActivity2::class.java)
             context.startActivity(intent)
@@ -74,7 +58,6 @@ class MiAdaptadorRecycler (var personajes : ArrayList<Personaje>, var  context: 
      * getItemCount() nos devuelve el tamaño de la lista, que lo necesita el RecyclerView.
      */
     override fun getItemCount(): Int {
-        //del array list que se pasa, el size, así sabe los elementos a pintar.
         return personajes.size
     }
 
@@ -85,13 +68,6 @@ class MiAdaptadorRecycler (var personajes : ArrayList<Personaje>, var  context: 
      * se puede declarar aquí.
      */
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        //Esto solo se asocia la primera vez que se llama a la clase, en el método onCreate de la clase que contiene a esta.
-        //Por eso no hace falta que hagamos lo que hacíamos en el método getView de los adaptadores para las listsViews.
-        //val nombrePersonaje = view.findViewById(R.id.txtNombre) as TextView
-        //val tipoPersonaje = view.findViewById(R.id.txtTipo) as TextView
-        //val avatar = view.findViewById(R.id.imgImagen) as ImageView
-
-        //Como en el ejemplo general de las listas (ProbandoListas) vemos que se puede inflar cada elemento con una card o con un layout.
         val nombrePersonaje = view.findViewById(R.id.txtNombre) as TextView
         val carrilPersonaje = view.findViewById(R.id.txtCarril) as TextView
         val arquetipoPersonaje = view.findViewById(R.id.txtArquetipo) as TextView
@@ -138,18 +114,7 @@ class MiAdaptadorRecycler (var personajes : ArrayList<Personaje>, var  context: 
                 var res: Drawable = context.resources.getDrawable(imageResource)
                 avatar.setImageDrawable(res)
             }
-/*            else {
-                Glide.with(context).load(pers.imagen).into(avatar)
-                *//*
-                Para que funcione Glide se debe poner esta dependencia en build.gradle y sincronizar el proyecto:
-                implementation "com.github.bumptech.glide:glide:4.11.0"
-                 *//*
-                //Picasso.with(context).load(url).into(this) //--> Esta es otra librería que hace lo mismo que Glide. Algo más antigua pero vigente.
-            }*/
 
-            //Para marcar o desmarcar al seleccionado usamos el siguiente código.
-            //comparo la posición y pinto en el color elegido(blue)
-            //está implementado de dos maneras, uan deprecated y actual.
             if (pos == MiAdaptadorRecycler.seleccionado) {
                 with(nombrePersonaje) {
                     this.setTextColor(resources.getColor(R.color.blue))
@@ -163,12 +128,6 @@ class MiAdaptadorRecycler (var personajes : ArrayList<Personaje>, var  context: 
                 carrilPersonaje.setTextColor(R.color.black)
             }
 
-//            itemView.setOnLongClickListener(View.OnLongClickListener() {
-//                Log.e("ACSC0","long click")
-//            }
-
-            //Se levanta una escucha para cada item. Si pulsamos el seleccionado pondremos la selección a -1, (deselecciona)
-            // en otro caso será el nuevo sleccionado.
             itemView.setOnClickListener {
                 if (pos == MiAdaptadorRecycler.seleccionado){
                     MiAdaptadorRecycler.seleccionado = -1
@@ -177,13 +136,8 @@ class MiAdaptadorRecycler (var personajes : ArrayList<Personaje>, var  context: 
                     MiAdaptadorRecycler.seleccionado = pos
                     Log.e("ACSC0", "Seleccionado: ${Almacen.personajes.get(MiAdaptadorRecycler.seleccionado).toString()}")
                 }
-                //Con la siguiente instrucción forzamos a recargar el viewHolder porque han cambiado los datos. Así pintará al seleccionado.
 
                 miAdaptadorRecycler.notifyDataSetChanged()
-
-//                val intent = Intent(context, MainActivity2::class.java)
-//
-//                context.startActivity(intent)
 
                 Toast.makeText(context, "Valor seleccionado " +  MiAdaptadorRecycler.seleccionado.toString(), Toast.LENGTH_SHORT).show()
 
