@@ -18,11 +18,8 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.listadodetalle_dialogs_sqlite.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
-
-    lateinit var binding: ActivityMainBinding
 
     lateinit var miRecyclerView : RecyclerView
     companion object {
@@ -30,6 +27,7 @@ class MainActivity : AppCompatActivity() {
         lateinit var contextoPrincipal: Context
     }
 
+    lateinit var PersonajesRecycler: RecyclerView
     lateinit var edNombre: EditText
     lateinit var edCarril: EditText
     lateinit var edArquetipo: EditText
@@ -38,6 +36,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var botonBuscar: Button
     lateinit var botonBorrar: Button
     lateinit var botonEditar: Button
+    lateinit var botonDetalle: Button
     lateinit var txtListdo: TextView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,14 +51,12 @@ class MainActivity : AppCompatActivity() {
         botonBuscar = findViewById(R.id.btnBuscar)
         botonBorrar = findViewById(R.id.btnBorrar)
         botonEditar = findViewById(R.id.btnEditar)
-        txtListdo = findViewById(R.id.listaPersonajesRecycler)
-
-        binding=ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        botonDetalle = findViewById(R.id.btnDetalle)
+        PersonajesRecycler = findViewById(R.id.listaPersonajesRecycler)
 
         Almacen.personajes = Conexion.obtenerPersonajes(this)
 
-        miRecyclerView = binding.listaPersonajesRecycler as RecyclerView
+        miRecyclerView = PersonajesRecycler as RecyclerView
         miRecyclerView.setHasFixedSize(true)//hace que se ajuste a lo que has diseñado
         miRecyclerView.layoutManager = LinearLayoutManager(this)//se dice el tipo de Layout, dejampos este.
         //esta es la clave. Creo un objeto de tipo Mi Adaptador y le paso la lista que he creado prevaimente más arriba.
@@ -68,7 +65,7 @@ class MainActivity : AppCompatActivity() {
         //aquí es donde hace la "magia", al pasarle a mi Recicler View, el adaptador creado.
         miRecyclerView.adapter = miAdapter
 
-        binding.btnDetalle.setOnClickListener {
+        botonDetalle.setOnClickListener {
             if (MiAdaptadorRecycler.seleccionado >= 0) {
                 val pe = Almacen.personajes.get(MiAdaptadorRecycler.seleccionado)
                 Log.e("ACSCO",pe.toString())
