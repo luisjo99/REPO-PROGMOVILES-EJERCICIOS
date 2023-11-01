@@ -1,4 +1,4 @@
-package com.example.recyclerpersonajes_dialogs_sqlite
+package com.example.recyclerjuegolss
 
 import Auxiliar.Conexion
 import Modelo.Personaje
@@ -10,7 +10,7 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 
-class MainActivity : AppCompatActivity() {
+class MainActivity3 : AppCompatActivity() {
 
     lateinit var edNombre: EditText
     lateinit var edCarril: EditText
@@ -24,8 +24,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
+        setContentView(R.layout.activity_main3)
         edNombre.requestFocus()
         edNombre = findViewById(R.id.edNombre)
         edCarril = findViewById(R.id.edCarril)
@@ -102,7 +101,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun buscarPersonaje(view: View) {
-        var p: Personaje? = null
+        var p:Personaje? = null
         p = Conexion.buscarPersonaje(this, edNombre.text.toString())
         if (p!=null) {
             edCarril.setText(p.carril)
