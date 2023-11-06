@@ -6,6 +6,7 @@ import Modelo.Almacen
 import Modelo.Personaje
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -15,12 +16,17 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 class MainActivity : AppCompatActivity() {
 
+    val positiveButtonClick = { dialog: DialogInterface, which: Int ->
+        Toast.makeText(applicationContext,
+            "Has pulsado sí", Toast.LENGTH_SHORT).show()
+    }
     lateinit var miRecyclerView : RecyclerView
     companion object {
         @SuppressLint("StaticFieldLeak")
@@ -74,7 +80,14 @@ class MainActivity : AppCompatActivity() {
                 ContextCompat.startActivity(contextoPrincipal, inte, null)
             }
             else {
-                Toast.makeText(this,"Selecciona algo previamente", Toast.LENGTH_SHORT).show()
+                val builder = AlertDialog.Builder(this)
+                with(builder)
+                {
+                    setTitle("ERROR")
+                    setMessage("Selecciona algo previamente")
+                    setPositiveButton("Aceptar", DialogInterface.OnClickListener(positiveButtonClick))
+                    show()
+                }
             }
         }
         contextoPrincipal = this
@@ -83,7 +96,15 @@ class MainActivity : AppCompatActivity() {
     fun addPersonaje(view: View) {
         if (edNombre.text.toString().trim().isEmpty() || edCarril.text.toString().trim().isEmpty()
             || edArquetipo.text.toString().trim().isEmpty() || edImagen.text.toString().trim().isEmpty()){
-            Toast.makeText(this, "Campos en blanco", Toast.LENGTH_SHORT).show()
+            val builder = AlertDialog.Builder(this)
+
+            with(builder)
+            {
+                setTitle("ERROR")
+                setMessage("Campos en blanco")
+                setPositiveButton("Aceptar", DialogInterface.OnClickListener(positiveButtonClick))
+                show()
+            }
         }
         else {
             var pers: Personaje = Personaje(
@@ -103,8 +124,17 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this, "Personaje insertado", Toast.LENGTH_SHORT).show()
                 listarPersonajes(view)
             }
-            else
-                Toast.makeText(this, "Ya existe ese NOMBRE. Personaje NO insertado", Toast.LENGTH_SHORT).show()
+            else{
+                val builder = AlertDialog.Builder(this)
+
+                with(builder)
+                {
+                    setTitle("EXISTE")
+                    setMessage("Ya existe ese NOMBRE. Personaje NO insertado")
+                    setPositiveButton("Aceptar", DialogInterface.OnClickListener(positiveButtonClick))
+                    show()
+                }
+            }
         }
     }
 
@@ -118,8 +148,17 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(this, "Se borró el personaje con ese NOMBRE", Toast.LENGTH_SHORT).show()
             listarPersonajes(view)
         }
-        else
-            Toast.makeText(this, "No existe un personaje con ese NOMBRE", Toast.LENGTH_SHORT).show()
+        else{
+            val builder = AlertDialog.Builder(this)
+
+            with(builder)
+            {
+                setTitle("NO EXISTE")
+                setMessage("No existe un personaje con ese NOMBRE")
+                setPositiveButton("Aceptar", DialogInterface.OnClickListener(positiveButtonClick))
+                show()
+            }
+        }
     }
 
     fun modPersonaje(view: View) {
@@ -137,8 +176,17 @@ class MainActivity : AppCompatActivity() {
             var cant = Conexion.modPersonaje(this, edNombre.text.toString(), pers)
             if (cant == 1)
                 Toast.makeText(this, "Se modificaron los datos", Toast.LENGTH_SHORT).show()
-            else
-                Toast.makeText(this, "No existe un personaje con ese NOMBRE", Toast.LENGTH_SHORT).show()
+            else{
+                val builder = AlertDialog.Builder(this)
+
+                with(builder)
+                {
+                    setTitle("NO EXISTE")
+                    setMessage("No existe un personaje con ese NOMBRE")
+                    setPositiveButton("Aceptar", DialogInterface.OnClickListener(positiveButtonClick))
+                    show()
+                }
+            }
         }
         listarPersonajes(view)
     }
@@ -151,24 +199,30 @@ class MainActivity : AppCompatActivity() {
             edArquetipo.setText(p.arquetipo)
             edImagen.setText(p.imagen)
         } else {
-            Toast.makeText(this, "No existe un personaje con ese NOMBRE", Toast.LENGTH_SHORT).show()
-        }
+            val builder = AlertDialog.Builder(this)
 
+            with(builder)
+            {
+                setTitle("NO EXISTE")
+                setMessage("No existe un personaje con ese NOMBRE")
+                setPositiveButton("Aceptar", DialogInterface.OnClickListener(positiveButtonClick))
+                show()
+            }
+        }
     }
 
     fun listarPersonajes(view: View) {
-        var listado:ArrayList<Personaje> = Conexion.obtenerPersonajes(this)
 
-        txtListdo.setText("")
+        // Actualiza los datos en tu lista
+        Almacen.personajes = Conexion.obtenerPersonajes(this)
 
-        if (listado.size==0) {
-            Toast.makeText(this, "No existen datos en la tabla", Toast.LENGTH_SHORT).show()
-        }
-        else {
-            for(p in listado){
-                var cadena = p.nombre + ", " + p.carril + ", " + p.arquetipo + ", " + p.imagen + "\r\n"
-                txtListdo.append(cadena)
-            }
-        }
+        // Crea un nuevo adaptador con los datos actualizados
+        var miAdapter = MiAdaptadorRecycler(Almacen.personajes, this)
+
+        // Establece el nuevo adaptador en tu RecyclerView
+        miRecyclerView.adapter = miAdapter
+
+        // Notifica al adaptador que los datos han cambiado
+        miAdapter.notifyDataSetChanged()
     }
 }
