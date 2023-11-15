@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "18778764688",
+    "project_id": "conexionylogin",
+    "storage_bucket": "conexionylogin.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:18778764688:android:0364c5bba45387e878ef15",
+        "android_client_info": {
+          "package_name": "com.example.conexionylogin"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA_2404ZVcF5IBQpqIwV3Nb4SOevN3OKqQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
