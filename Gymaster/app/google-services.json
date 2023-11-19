@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "192231283254",
+    "project_id": "gymaster-e2e2e",
+    "storage_bucket": "gymaster-e2e2e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:192231283254:android:7d96b80440c8dbe4d4d697",
+        "android_client_info": {
+          "package_name": "com.example.gymaster"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC7vg54B-_e4tv5XPSMnVUz3ezUh98iCC4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

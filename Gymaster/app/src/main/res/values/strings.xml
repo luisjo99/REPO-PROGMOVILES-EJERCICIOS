@@ -1,3 +1,12 @@
 <resources>
+    <string name="your_web_client_id">192231283254-o5m57s8662kg8gvst99bs1rst6v4uqgu.apps.googleusercontent.com</string>
     <string name="app_name">Gymaster</string>
+    <string name="hintPassword">Introduce la contraseña</string>
+    <string name="hintPassword2">Repite la contraseña</string>
+    <string name="hintEmail">Introduce el correo</string>
+    <string name="eBIniciarsesion">Iniciar sesión</string>
+    <string name="eBIniciarsesiongoogle">Iniciar sesión con Google</string>
+    <string name="eBRegistrar"><u>Regístrate</u></string>
+    <string name="textoRegistro">Si aún no tienes cuenta:         </string>
+    <string name="registroUsuario">Registrar usuario</string>
 </resources>

@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "192231283254",
+    "project_id": "gymaster-e2e2e",
+    "storage_bucket": "gymaster-e2e2e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:192231283254:android:7d96b80440c8dbe4d4d697",
+        "android_client_info": {
+          "package_name": "com.example.gymaster"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "192231283254-imliq4tkki23vqcivu6l5eld333uuepa.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.gymaster",
+            "certificate_hash": "084dff7032f0b00ef165d749d88bb6b84e076ab0"
+          }
+        },
+        {
+          "client_id": "192231283254-o5m57s8662kg8gvst99bs1rst6v4uqgu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC7vg54B-_e4tv5XPSMnVUz3ezUh98iCC4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "192231283254-o5m57s8662kg8gvst99bs1rst6v4uqgu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
