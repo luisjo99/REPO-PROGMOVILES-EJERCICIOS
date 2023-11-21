@@ -9,4 +9,5 @@
     <string name="eBRegistrar"><u>Regístrate</u></string>
     <string name="textoRegistro">Si aún no tienes cuenta:         </string>
     <string name="registroUsuario">Registrar usuario</string>
+    <string name="select">Elegir ejercicio</string>
 </resources>
