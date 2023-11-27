@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/fondodentro"
     tools:context=".Ventana1">
 
     <com.google.android.material.appbar.MaterialToolbar
@@ -13,120 +14,125 @@
         android:background="?attr/colorPrimary"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
-        app:titleCentered="true"
-        app:subtitleCentered="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.0"
+        app:subtitleCentered="true"
+        app:titleCentered="true" />
 
     <EditText
         android:id="@+id/edMaxpeso"
         android:layout_width="314dp"
         android:layout_height="73dp"
+        android:background="@color/white"
         android:ems="10"
-        android:hint="Personal Récord..."
-        android:inputType="textPersonName"
+        android:hint="Personal Récord (kg)"
+        android:inputType="numberDecimal"
+        android:textAlignment="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.267" />
+        app:layout_constraintVertical_bias="0.478" />
 
     <EditText
         android:id="@+id/edDate"
         android:layout_width="314dp"
         android:layout_height="73dp"
+        android:background="@color/white"
         android:ems="10"
-        android:hint="Fecha..."
+        android:focusable="false"
+        android:hint="Fecha"
         android:inputType="textPersonName"
+        android:textAlignment="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.405" />
-
-    <EditText
-        android:id="@+id/edImagen"
-        android:layout_width="314dp"
-        android:layout_height="73dp"
-        android:ems="10"
-        android:hint="Imagen..."
-        android:inputType="textPersonName"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.505"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.544" />
+        app:layout_constraintVertical_bias="0.617" />
 
     <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayout"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
         android:layout_width="314dp"
         android:layout_height="73dp"
         android:layout_marginStart="32dp"
         android:layout_marginEnd="32dp"
+        android:background="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.545"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.126"
+        app:layout_constraintVertical_bias="0.164"
         app:startIconDrawable="@drawable/ic_ejercicio">
 
         <AutoCompleteTextView
             android:id="@+id/edNombre"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:inputType="none"
-            android:hint="@string/select" />
+            android:background="@color/white"
+            android:hint="@string/select"
+            android:inputType="none" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <LinearLayout
-        android:id="@+id/linearLayout2"
-        android:layout_width="391dp"
-        android:layout_height="88dp"
-        android:orientation="horizontal"
+    <Button
+        android:id="@+id/btnAdd"
+        android:layout_width="201dp"
+        android:layout_height="56dp"
+        android:onClick="addEjercicio"
+        android:text="Añadir"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.707">
+        app:layout_constraintVertical_bias="0.765" />
 
-        <Button
-            android:id="@+id/btnAdd"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="addEjercicio"
-            android:text="Insertar"
-            android:textSize="12sp" />
+    <Button
+        android:id="@+id/btnEditar"
+        android:layout_width="143dp"
+        android:layout_height="53dp"
+        android:onClick="modEjercicio"
+        android:text="Modificar"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.876" />
 
-        <Button
-            android:id="@+id/btnBuscar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="buscarEjercicio"
-            android:text="Consultar"
-            android:textSize="12sp" />
+    <Button
+        android:id="@+id/btnBuscar"
+        android:layout_width="143dp"
+        android:layout_height="53dp"
+        android:onClick="buscarEjercicio"
+        android:text="Consultar"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.186"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.305" />
 
-        <Button
-            android:id="@+id/btnBorrar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="delEjercicio"
-            android:text="Eliminar"
-            android:textSize="12sp" />
-
-        <Button
-            android:id="@+id/btnEditar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="modEjercicio"
-            android:text="Modificar"
-            android:textSize="12sp" />
-    </LinearLayout>
+    <Button
+        android:id="@+id/btnBorrar"
+        android:layout_width="143dp"
+        android:layout_height="53dp"
+        android:onClick="delEjercicio"
+        android:text="Eliminar"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.817"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.305" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

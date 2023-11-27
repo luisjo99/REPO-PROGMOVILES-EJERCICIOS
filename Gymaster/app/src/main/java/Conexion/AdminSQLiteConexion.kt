@@ -16,7 +16,7 @@ class AdminSQLiteConexion (context: Context, name: String, factory: SQLiteDataba
         y pequeñas cosas, por lo tanto tampoco se metarán grandes sentencias yq que SQLite no está pensado para eso
         Para BBDD más complejas, ya usarmeos servicios externos.
         */
-        db.execSQL("create table ejercicios(nombre text primary key, weight int, date text, imagen text)")
+        db.execSQL("create table ejercicios(nombre text, email text, weight int, date text, imagen text, PRIMARY KEY(nombre, email))")
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {

@@ -1,19 +1,22 @@
 package Adaptadores
 
+import Auxiliar.Conexion.delEjercicio
 import Modelo.Almacen
 import Modelo.Ejercicio
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
-import android.graphics.drawable.Drawable
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.PopupMenu
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.gymaster.Home
@@ -60,6 +63,8 @@ class MiAdaptadorRecycler (var ejercicios : ArrayList<Ejercicio>, var  context: 
         return ejercicios.size
     }
 
+    val positiveButtonClick = { dialog: DialogInterface, which: Int ->
+    }
 
     //--------------------------------- Clase interna ViewHolder -----------------------------------
     /**
@@ -72,7 +77,7 @@ class MiAdaptadorRecycler (var ejercicios : ArrayList<Ejercicio>, var  context: 
         val dateEjercicio = view.findViewById(R.id.txtDate) as TextView
         val avatar = view.findViewById(R.id.imgImagen) as ImageView
 
-        val btnDetalleEspcifico = view.findViewById<Button>(R.id.btnDetalleCard) as Button
+        val btnSeries = view.findViewById<Button>(R.id.btnSeries) as Button
         /**
          * Éste método se llama desde el método onBindViewHolder de la clase contenedora. Como no vuelve a crear un objeto
          * sino que usa el ya creado en onCreateViewHolder, las asociaciones findViewById no vuelven a hacerse y es más eficiente.
@@ -83,13 +88,10 @@ class MiAdaptadorRecycler (var ejercicios : ArrayList<Ejercicio>, var  context: 
             maxpesoEjercicio.text = ejer.weight.toString()
             dateEjercicio.text = ejer.date
 
-            val imageResource = context.resources.getIdentifier(ejer.imagen, "drawable", context.packageName)
-            if (imageResource != 0) {
-                val res = context.resources.getDrawable(imageResource)
-                avatar.setImageDrawable(res)
-            } else {
-                avatar.setImageResource(R.drawable.default_image)   // your default image here
-            }
+            val recurso = ejer.nombre.replace("\\s+".toRegex(), "").toLowerCase()
+            val imageResource = context.resources.getIdentifier(recurso, "drawable", context.packageName)
+            val res = context.resources.getDrawable(imageResource)
+            avatar.setImageDrawable(res)
 
 
             if (pos == MiAdaptadorRecycler.seleccionado) {
@@ -97,12 +99,14 @@ class MiAdaptadorRecycler (var ejercicios : ArrayList<Ejercicio>, var  context: 
                     this.setTextColor(resources.getColor(R.color.blue))
                 }
                 maxpesoEjercicio.setTextColor(R.color.blue)
+                dateEjercicio.setTextColor(R.color.blue)
             }
             else {
                 with(nombreEjercicio) {
                     this.setTextColor(resources.getColor(R.color.black))
                 }
                 maxpesoEjercicio.setTextColor(R.color.black)
+                dateEjercicio.setTextColor(R.color.black)
             }
 
             itemView.setOnClickListener {
@@ -116,22 +120,51 @@ class MiAdaptadorRecycler (var ejercicios : ArrayList<Ejercicio>, var  context: 
 
                 miAdaptadorRecycler.notifyDataSetChanged()
 
-                Toast.makeText(context, "Valor seleccionado " +  MiAdaptadorRecycler.seleccionado.toString(), Toast.LENGTH_SHORT).show()
-
             }
             itemView.setOnLongClickListener(View.OnLongClickListener {
-                Log.e("ACSCO","Seleccionado con long click: ${Almacen.ejercicios.get(pos).toString()}")
-                Almacen.ejercicios.removeAt(pos)
-                miAdaptadorRecycler.notifyDataSetChanged()
-                true //Tenemos que devolver un valor boolean.
+                // Crear el menú contextual
+                val popupMenu = PopupMenu(context, itemView)
+                popupMenu.inflate(R.menu.context_menu)
+
+                // Configurar la acción del ítem del menú contextual
+                popupMenu.setOnMenuItemClickListener { menuItem ->
+                    when (menuItem.itemId) {
+                        R.id.menu_detail -> {
+                            // Acción para la opción "Detalle"
+                            var inte: Intent = Intent(itemView.context, RecyclerDetalle::class.java)
+                            inte.putExtra("obj", ejer)
+                            ContextCompat.startActivity(itemView.context, inte, null)
+                            true
+                        }
+                        R.id.menu_delete -> {
+                            // Acción para la opción "Borrar"
+                            val ejercicioSeleccionado = Almacen.ejercicios[pos]
+                            delEjercicio(context as Home, ejercicioSeleccionado.nombre, ejercicioSeleccionado.email)
+                            Almacen.ejercicios.removeAt(pos)
+                            miAdaptadorRecycler.notifyDataSetChanged()
+                            Toast.makeText(context, "Ejercicio borrado", Toast.LENGTH_SHORT).show()
+                            true
+                        }
+                        else -> false
+                    }
+                }
+
+                // Mostrar el menú contextual
+                popupMenu.show()
+
+                true // Devolver un valor booleano
             })
 
+            btnSeries.setOnClickListener {
+                val builder = AlertDialog.Builder(itemView.context)
 
-            btnDetalleEspcifico.setOnClickListener {
-                Log.e("Fernando","Has pulsado el botón de ${ejer}")
-                var inte : Intent = Intent(it.context, RecyclerDetalle::class.java)
-                inte.putExtra("obj",ejer)
-                ContextCompat.startActivity(it.context, inte, null)
+                with(builder)
+                {
+                    setTitle(ejer.nombre)
+                    setMessage("4 Series x 10-15 Repeticiones")
+                    setPositiveButton("Aceptar", DialogInterface.OnClickListener(miAdaptadorRecycler.positiveButtonClick))
+                    show()
+                }
             }
         }
     }

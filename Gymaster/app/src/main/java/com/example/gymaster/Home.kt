@@ -12,15 +12,19 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
+import androidx.core.view.size
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.gymaster.databinding.ActivityHomeBinding
 import com.google.android.gms.auth.api.identity.Identity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.ktx.Firebase
+import org.checkerframework.framework.qual.InvisibleQualifier
 
 class Home : AppCompatActivity() {
     lateinit var binding: ActivityHomeBinding
@@ -57,6 +61,7 @@ class Home : AppCompatActivity() {
         //Para la autenticación, de cualquier tipo.
         firebaseauth = FirebaseAuth.getInstance()
 
+
         binding.btCerrarSesion.setOnClickListener {
             Log.e(TAG, firebaseauth.currentUser.toString())
             // Olvidar al usuario, limpiando cualquier referencia persistente
@@ -77,7 +82,8 @@ class Home : AppCompatActivity() {
             finish()
         }
 
-        Almacen.ejercicios = Conexion.obtenerEjercicios(this)
+        val userEmail = intent.getStringExtra("email").toString()
+        Almacen.ejercicios = Conexion.obtenerEjercicios(this, userEmail)
 
         miRecyclerView = binding.listaEjerciciosRecycler as RecyclerView
         miRecyclerView.setHasFixedSize(true)//hace que se ajuste a lo que has diseñado
@@ -109,6 +115,15 @@ class Home : AppCompatActivity() {
         }
         Ventana1.contextoPrincipal = this
 
+        if (Almacen.ejercicios.size > 0) {
+            // Si la lista tiene elementos, hacer invisible el TextView
+            binding.txtRecycler.visibility = View.INVISIBLE
+            binding.btnDetalle.visibility = Button.VISIBLE
+        } else {
+            // Si la lista está vacía, hacer visible el TextView
+            binding.txtRecycler.visibility = View.VISIBLE
+            binding.btnDetalle.visibility = Button.INVISIBLE
+        }
     }
     //************************* Funciones auxiliares para los menú de puntos *****************************
     //la primera infla el menú que previamente hemos creado como resource, la segunda carga las opciones.
@@ -123,11 +138,7 @@ class Home : AppCompatActivity() {
                 irAVentana1()
             }
             R.id.mnOp2 -> {
-                irAVentanaOpcion2()
-                Toast.makeText(this, "OTRA COSA", Toast.LENGTH_SHORT).show()
-            }
-            R.id.mnOp1 -> {
-                Toast.makeText(this, "OTRA COSA", Toast.LENGTH_LONG).show()
+                irAVentana2()
             }
         }
         return super.onOptionsItemSelected(item)
@@ -139,13 +150,20 @@ class Home : AppCompatActivity() {
     }*/
     //version lambda de la funcion. Unit equivale a void de Java.
     private val irAVentana1: () -> Unit = {
-        val miIntent = Intent(this, Ventana1::class.java)
+        val miIntent = Intent(this, Ventana1::class.java).apply {
+            putExtra("email", intent.getStringExtra("email").toString())
+            putExtra("provider", intent.getStringExtra("provider").toString())
+            putExtra("nombre",intent.getStringExtra("nombre").toString())
+        }
         startActivity(miIntent)
     }
 
-    private val irAVentanaOpcion2: () -> Unit = {
-//        val miIntent = Intent(this, VentanaOpcion2::class.java)
-//        miIntent.putExtra("nombre", binding.edNombre.text.toString())
-//        startActivity(miIntent)
+    private val irAVentana2: () -> Unit = {
+        val miIntent = Intent(this, Ventana2::class.java).apply {
+            putExtra("email", intent.getStringExtra("email").toString())
+            putExtra("provider", intent.getStringExtra("provider").toString())
+            putExtra("nombre",intent.getStringExtra("nombre").toString())
+        }
+        startActivity(miIntent)
     }
 }

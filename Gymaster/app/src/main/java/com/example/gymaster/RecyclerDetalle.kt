@@ -22,36 +22,49 @@ class RecyclerDetalle : AppCompatActivity() {
             binding.imgImagen2.setImageResource(imgId)
         }
 
-        if (e.nombre.equals("Khazix")){
-            binding.txtDescripcion.setText("Kha'Zix salta hacia una zona e inflige daño físico al aterrizar. " +
-                    "Si decide evolucionar Alas, el alcance de Salto aumenta en 200. Además, al matar o " +
-                    "ayudar a matar a un campeón, el enfriamiento de Salto se restablece.")
+        if (e.nombre.equals("Press Banca")){
+            binding.txtDescripcion.setText("El press de banca es un ejercicio de levantamiento de pesas " +
+                    "realizado acostado en un banco horizontal. Se centra en desarrollar la fuerza y " +
+                    "masa muscular del pecho, tríceps y hombros. Es esencial en entrenamientos de fuerza " +
+                    "y a menudo adaptado para objetivos específicos.")
         }
 
-        if (e.nombre.equals("Yone")){
-            binding.txtDescripcion.setText("Yone entra en su forma espiritual, lo que le otorga velocidad de " +
-                    "movimiento y hace que abandone su cuerpo. Cuando acaba el tiempo de la forma espiritual " +
-                    "de Yone, vuelve a su cuerpo e inflige un porcentaje de todo el daño infligido durante " +
-                    "su forma espiritual.")
+        if (e.nombre.equals("Sentadilla")){
+            binding.txtDescripcion.setText("\n" +
+                    "La sentadilla es un ejercicio fundamental que involucra flexionar las rodillas y " +
+                    "caderas, descendiendo el cuerpo hacia abajo y luego volviendo a la posición inicial. " +
+                    "Este movimiento trabaja eficazmente los músculos de las piernas, glúteos y la zona " +
+                    "central, contribuyendo al desarrollo de fuerza y estabilidad.")
         }
 
-        if (e.nombre.equals("Yasuo")){
-            binding.txtDescripcion.setText("Yasuo, un jonio de profunda determinación, es un ágil espadachín " +
-                    "que empuña al propio viento contra sus enemigos.")
+        if (e.nombre.equals("Press Frontal")){
+            binding.txtDescripcion.setText("\n" +
+                    "El press frontal es un ejercicio de levantamiento de pesas que se realiza levantando " +
+                    "una barra desde la parte frontal del cuerpo hacia arriba, por encima de la cabeza. " +
+                    "Este movimiento fortalece los hombros y los músculos superiores del tronco, mejorando " +
+                    "la fuerza y la estabilidad en la parte superior del cuerpo. ")
         }
 
-        if (e.nombre.equals("Viego")){
-            binding.txtDescripcion.setText("Viego se deshace del cuerpo que haya poseído y se teleporta hacia " +
-                    "delante, atacando al campeón enemigo con el menor porcentaje de vida que se encuentre " +
-                    "a su alcance e infligiéndole daño adicional en función de la vida que le falte. Empuja " +
-                    "a los demás enemigos que se encuentren a su alcance.")
+        if (e.nombre.equals("Peso Muerto")){
+            binding.txtDescripcion.setText("El peso muerto es un ejercicio fundamental de levantamiento de " +
+                    "pesas que involucra levantar una barra cargada desde el suelo hasta la posición de pie. " +
+                    "Este movimiento trabaja diversos grupos musculares, como la espalda baja, los glúteos, " +
+                    "los isquiotibiales y los músculos de la cadena posterior.")
         }
 
-        if (e.nombre.equals("Fizz")){
-            binding.txtDescripcion.setText("Fizz es un yordle prehistórico, de al menos más de 10000 años, " +
-                    "que se remonta a una época en la que no había civilizaciones masivas en la tierra. " +
-                    "Pudo sobrevivir durante milenios debido a la hibernación y al ser un Yordle, una raza " +
-                    "mágica que no envejece.")
+        if (e.nombre.equals("Prensa")){
+            binding.txtDescripcion.setText("La prensa es un ejercicio de entrenamiento de piernas que implica " +
+                    "empujar una carga hacia arriba con las piernas. Este movimiento se realiza generalmente " +
+                    "en una máquina de prensa, donde el usuario se sienta y empuja una plataforma hacia arriba " +
+                    "con los pies. La prensa trabaja principalmente los músculos de las piernas, incluyendo " +
+                    "cuádriceps, isquiotibiales y glúteos.")
+        }
+
+        if (e.nombre.equals("Remo en barra")){
+            binding.txtDescripcion.setText("El remo en barra es un ejercicio de levantamiento de pesas que se " +
+                    "realiza al jalar una barra hacia el torso. Este movimiento, a menudo realizado con la " +
+                    "espalda recta y el torso inclinado hacia adelante, se centra en el desarrollo de los músculos " +
+                    "de la espalda, incluyendo el trapecio, el dorsal ancho y los deltoides posteriores. ")
         }
 
         binding.btnVolver.setOnClickListener {

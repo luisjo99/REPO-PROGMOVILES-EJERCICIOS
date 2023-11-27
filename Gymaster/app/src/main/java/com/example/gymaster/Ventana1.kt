@@ -5,28 +5,25 @@ import Auxiliar.Conexion
 import Modelo.Almacen
 import Modelo.Ejercicio
 import android.annotation.SuppressLint
+import android.app.DatePickerDialog
 import android.content.Context
 import android.content.DialogInterface
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.recyclerview.widget.RecyclerView
 import com.example.gymaster.databinding.ActivityVentana1Binding
-import com.google.android.material.textfield.MaterialAutoCompleteTextView
+import java.util.Calendar
 
 class Ventana1 : AppCompatActivity() {
 
     lateinit var binding: ActivityVentana1Binding
 
     val positiveButtonClick = { dialog: DialogInterface, which: Int ->
-        Toast.makeText(applicationContext,
-            "Has pulsado sí", Toast.LENGTH_SHORT).show()
     }
     lateinit var miRecyclerView : RecyclerView
     companion object {
@@ -38,12 +35,12 @@ class Ventana1 : AppCompatActivity() {
         binding = ActivityVentana1Binding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val items = listOf("Press Banca", "Sentadilla", "Press Frontal", "Peso Muerto")
+        val items = listOf("Press Banca", "Sentadilla", "Press Frontal", "Peso Muerto", "Prensa", "Remo en barra")
         val adapter = ArrayAdapter(this, R.layout.list_item, items)
         binding.edNombre.setAdapter(adapter)
 
-
         findViewById<AutoCompleteTextView>(R.id.edNombre).setAdapter(adapter)
+
         binding.toolbar1.title = "    GYMASTER"
         binding.toolbar1.subtitle = "     AÑADIR EJERCICIOS"
         binding.toolbar1.setLogo(R.drawable.ic_addejer)
@@ -57,11 +54,27 @@ class Ventana1 : AppCompatActivity() {
             listarEjercicios(binding.root)
             finish()
         }
+
+        val datePickerDialog = DatePickerDialog(
+            this,
+            { _, year, monthOfYear, dayOfMonth ->
+                val selectedDate = "$dayOfMonth/${monthOfYear + 1}/$year"
+                binding.edDate.setText(selectedDate)
+            },
+            // Establecer la fecha actual como predeterminada
+            Calendar.getInstance().get(Calendar.YEAR),
+            Calendar.getInstance().get(Calendar.MONTH),
+            Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
+        )
+
+        binding.edDate.setOnClickListener {
+            datePickerDialog.show()
+        }
     }
 
     fun addEjercicio(view: View) {
         if (binding.edNombre.text.toString().trim().isEmpty() || binding.edMaxpeso.text.toString().trim().isEmpty()
-            || binding.edDate.text.toString().trim().isEmpty() || binding.edImagen.text.toString().trim().isEmpty()){
+            || binding.edDate.text.toString().trim().isEmpty()){
             val builder = AlertDialog.Builder(this)
 
             with(builder)
@@ -74,21 +87,22 @@ class Ventana1 : AppCompatActivity() {
         }
         else {
             var ejer: Ejercicio = Ejercicio(
+                intent.getStringExtra("email").toString(),
                 binding.edNombre.text.toString(),
                 binding.edMaxpeso.text.toString().toDoubleOrNull() ?: 0.0,
                 binding.edDate.text.toString(),
-                binding.edImagen.text.toString()
+                binding.edNombre.text.toString().replace("\\s+".toRegex(), "").toLowerCase()
             )
             var codigo= Conexion.addEjercicio(this, ejer)
-            binding.edNombre.setText("")
-            binding.edMaxpeso.setText("")
-            binding.edDate.setText("")
-            binding.edImagen.setText("")
-            binding.edNombre.requestFocus()
+
             //la L es por ser un Long lo que trae codigo.
             if(codigo!=-1L) {
-                Toast.makeText(this, "Personaje insertado", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Ejercicio insertado", Toast.LENGTH_SHORT).show()
                 //listarEjercicios(view)
+                binding.edNombre.setText("")
+                binding.edMaxpeso.setText("")
+                binding.edDate.setText("")
+                binding.edNombre.requestFocus()
             }
             else{
                 val builder = AlertDialog.Builder(this)
@@ -96,7 +110,7 @@ class Ventana1 : AppCompatActivity() {
                 with(builder)
                 {
                     setTitle("EXISTE")
-                    setMessage("Ya existe ese NOMBRE. Personaje NO insertado")
+                    setMessage("Ya existe ese NOMBRE. Ejercicio NO insertado")
                     setPositiveButton("Aceptar", DialogInterface.OnClickListener(positiveButtonClick))
                     show()
                 }
@@ -105,14 +119,13 @@ class Ventana1 : AppCompatActivity() {
     }
 
     fun delEjercicio(view: View) {
-        var cant = Conexion.delEjercicio(this, binding.edNombre.text.toString())
-        binding.edNombre.setText("")
-        binding.edDate.setText("")
-        binding.edMaxpeso.setText("")
-        binding.edImagen.setText("")
+        var cant = Conexion.delEjercicio(this, binding.edNombre.text.toString(), intent.getStringExtra("email").toString())
         if (cant == 1) {
-            Toast.makeText(this, "Se borró el personaje con ese NOMBRE", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Se borró el ejercicio con ese NOMBRE", Toast.LENGTH_SHORT).show()
             //listarEjercicios(view)
+            binding.edNombre.setText("")
+            binding.edDate.setText("")
+            binding.edMaxpeso.setText("")
         }
         else{
             val builder = AlertDialog.Builder(this)
@@ -120,7 +133,7 @@ class Ventana1 : AppCompatActivity() {
             with(builder)
             {
                 setTitle("NO EXISTE")
-                setMessage("No existe un personaje con ese NOMBRE")
+                setMessage("No existe un ejercicio con ese NOMBRE")
                 setPositiveButton("Aceptar", DialogInterface.OnClickListener(positiveButtonClick))
                 show()
             }
@@ -129,26 +142,40 @@ class Ventana1 : AppCompatActivity() {
 
     fun modEjercicio(view: View) {
         if (binding.edNombre.text.toString().trim().isEmpty()|| binding.edMaxpeso.text.toString().trim().isEmpty()
-            || binding.edDate.text.toString().trim().isEmpty() || binding.edImagen.text.toString().trim().isEmpty()){
-            Toast.makeText(this, "Campos en blanco", Toast.LENGTH_SHORT).show()
+            || binding.edDate.text.toString().trim().isEmpty()){
+            val builder = AlertDialog.Builder(this)
+
+            with(builder)
+            {
+                setTitle("ERROR")
+                setMessage("Campos en blanco")
+                setPositiveButton("Aceptar", DialogInterface.OnClickListener(positiveButtonClick))
+                show()
+            }
         }
         else {
             var ejer: Ejercicio = Ejercicio(
-                binding.edNombre.getText().toString(),
+                intent.getStringExtra("email").toString(),
+                binding.edNombre.text.toString(),
                 binding.edMaxpeso.text.toString().toDoubleOrNull() ?: 0.0,
-                binding.edDate.getText().toString(),
-                binding.edImagen.getText().toString()
+                binding.edDate.text.toString(),
+                binding.edNombre.text.toString().replace("\\s+".toRegex(), "").toLowerCase()
             )
             var cant = Conexion.modEjercicio(this, binding.edNombre.text.toString(), ejer)
-            if (cant == 1)
+            if (cant == 1) {
                 Toast.makeText(this, "Se modificaron los datos", Toast.LENGTH_SHORT).show()
+                binding.edNombre.setText("")
+                binding.edMaxpeso.setText("")
+                binding.edDate.setText("")
+                binding.edNombre.requestFocus()
+            }
             else{
                 val builder = AlertDialog.Builder(this)
 
                 with(builder)
                 {
                     setTitle("NO EXISTE")
-                    setMessage("No existe un personaje con ese NOMBRE")
+                    setMessage("No existe un ejercicio con ese NOMBRE")
                     setPositiveButton("Aceptar", DialogInterface.OnClickListener(positiveButtonClick))
                     show()
                 }
@@ -159,18 +186,17 @@ class Ventana1 : AppCompatActivity() {
 
     fun buscarEjercicio(view: View) {
         var e:Ejercicio? = null
-        e = Conexion.buscarEjercicio(this, binding.edNombre.text.toString())
+        e = Conexion.buscarEjercicio(this, binding.edNombre.text.toString(), intent.getStringExtra("email").toString())
         if (e!=null) {
             binding.edMaxpeso.setText(e.weight.toString())
             binding.edDate.setText(e.date)
-            binding.edImagen.setText(e.imagen)
         } else {
             val builder = AlertDialog.Builder(this)
 
             with(builder)
             {
                 setTitle("NO EXISTE")
-                setMessage("No existe un personaje con ese NOMBRE")
+                setMessage("No existe un ejercicio con ese NOMBRE")
                 setPositiveButton("Aceptar", DialogInterface.OnClickListener(positiveButtonClick))
                 show()
             }
@@ -179,8 +205,9 @@ class Ventana1 : AppCompatActivity() {
 
     fun listarEjercicios(view: View) {
 
+        val userEmail = intent.getStringExtra("email").toString()
+        Almacen.ejercicios = Conexion.obtenerEjercicios(this, userEmail)
         // Actualiza los datos en tu lista
-        Almacen.ejercicios = Conexion.obtenerEjercicios(this)
 
         // Crea un nuevo adaptador con los datos actualizados
         var miAdapter = MiAdaptadorRecycler(Almacen.ejercicios, this)
