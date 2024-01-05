@@ -94,35 +94,14 @@ class Home : AppCompatActivity() {
         //aquí es donde hace la "magia", al pasarle a mi Recicler View, el adaptador creado.
         miRecyclerView.adapter = miAdapter
 
-        binding.btnDetalle.setOnClickListener {
-            if (MiAdaptadorRecycler.seleccionado >= 0) {
-                val pe = Almacen.ejercicios.get(MiAdaptadorRecycler.seleccionado)
-                Log.e("ACSCO",pe.toString())
-                var inte : Intent = Intent(Ventana1.contextoPrincipal, RecyclerDetalle::class.java)
-                inte.putExtra("obj", Almacen.ejercicios.get(MiAdaptadorRecycler.seleccionado))
-                ContextCompat.startActivity(Ventana1.contextoPrincipal, inte, null)
-            }
-            else {
-                val builder = AlertDialog.Builder(this)
-                with(builder)
-                {
-                    setTitle("ERROR")
-                    setMessage("Selecciona algo previamente")
-                    setPositiveButton("Aceptar", DialogInterface.OnClickListener(positiveButtonClick))
-                    show()
-                }
-            }
-        }
         Ventana1.contextoPrincipal = this
 
         if (Almacen.ejercicios.size > 0) {
             // Si la lista tiene elementos, hacer invisible el TextView
             binding.txtRecycler.visibility = View.INVISIBLE
-            binding.btnDetalle.visibility = Button.VISIBLE
         } else {
             // Si la lista está vacía, hacer visible el TextView
             binding.txtRecycler.visibility = View.VISIBLE
-            binding.btnDetalle.visibility = Button.INVISIBLE
         }
     }
     //************************* Funciones auxiliares para los menú de puntos *****************************

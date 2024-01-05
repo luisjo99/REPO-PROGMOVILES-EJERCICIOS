@@ -11,4 +11,21 @@
     <string name="textoRegistro">If you don\'t have an account:         </string>
     <string name="registroUsuario">Sign up user</string>
     <string name="select">Select exercises</string>
+    <string name="ejerRecycler">There are no recorded exercises</string>
+    <string name="cerrar">Log out</string>
+    <string name="btnConsultar">Check</string>
+    <string name="btnAñadir">Add</string>
+    <string name="btnModificar">Modify</string>
+    <string name="kilos">Personal Record (kg)</string>
+    <string name="fecha">Date</string>
+    <string name="addEjercicios">ADD EXERCISES</string>
+    <string name="ajustesUsuario">USER SETTINGS</string>
+    <string name="detallePulsar">Detail</string>
+    <string name="borrarPulsar">Delete</string>
+    <string name="banca">Bench Press</string>
+    <string name="sentadilla">Squat</string>
+    <string name="frontal">Overhead Press</string>
+    <string name="pesoMuerto">Deadlift</string>
+    <string name="prensa">Leg Press</string>
+    <string name="remo">Barbell Row</string>
 </resources>

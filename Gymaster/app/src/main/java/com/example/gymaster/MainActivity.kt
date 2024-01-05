@@ -1,6 +1,7 @@
 package com.example.gymaster
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -17,11 +18,16 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.firestore.FieldValue
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
     private lateinit var firebaseauth : FirebaseAuth
     private lateinit var googleSignInClient: GoogleSignInClient
+    var db = Firebase.firestore
 
     val TAG = "ACSCO"
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,6 +37,7 @@ class MainActivity : AppCompatActivity() {
 
         //Para la autenticación, de cualquier tipo.
         firebaseauth = FirebaseAuth.getInstance()
+        db = FirebaseFirestore.getInstance()
         //------------------------------ Autenticación con email y password ------------------------------------
         binding.eBRegistrar.setOnClickListener {
             val builder = AlertDialog.Builder(this)
@@ -54,7 +61,18 @@ class MainActivity : AppCompatActivity() {
                 if (email.isNotEmpty() && pass.isNotEmpty() && pass == pass2) {
                     firebaseauth.createUserWithEmailAndPassword(email, pass).addOnCompleteListener {
                         if (it.isSuccessful) {
-                            irHome(it.result?.user?.email?:"", Proveedor.BASIC)
+                            irHome(it.result?.user?.email ?: "", Proveedor.BASIC)
+
+                            val user = hashMapOf(
+                                "email" to email,
+                                "provider" to Proveedor.BASIC,
+                                "rol" to "normal",
+                                "timestamp" to FieldValue.serverTimestamp()
+                            )
+
+                            db.collection("users")
+                                .document(email)
+                                .set(user)
                         } else {
                             showAlert("Error registrando al usuario.")
                         }
@@ -76,6 +94,7 @@ class MainActivity : AppCompatActivity() {
                 firebaseauth.signInWithEmailAndPassword(email, password)
                     .addOnCompleteListener { task ->
                         if (task.isSuccessful) {
+                            // Guardar información del usuario en SharedPreferences
                             irHome(task.result?.user?.email ?: "", Proveedor.BASIC)
                             binding.txtEdEmail.setText("")
                             binding.textEdPassword.setText("")
@@ -151,6 +170,20 @@ class MainActivity : AppCompatActivity() {
             if (it.isSuccessful){
                 //hacer account. y ver otras propiedades interesantes.
                 irHome(account.email.toString(),Proveedor.GOOGLE, account.displayName.toString())
+
+                val user = it.result?.user
+                // Guardar información del usuario en Firestore
+                val userData = hashMapOf(
+                    "email" to account.email,
+                    "provider" to Proveedor.GOOGLE,
+                    "nombre" to account.displayName,
+                    "rol" to "normal",
+                    "timestamp" to FieldValue.serverTimestamp()
+                )
+
+                db.collection("users")
+                    .document(user?.email ?: "")
+                    .set(userData)
             }
             else {
                 Toast.makeText(this,it.exception.toString(), Toast.LENGTH_SHORT).show()

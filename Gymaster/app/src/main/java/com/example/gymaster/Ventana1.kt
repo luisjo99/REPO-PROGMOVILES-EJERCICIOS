@@ -6,15 +6,23 @@ import Modelo.Almacen
 import Modelo.Ejercicio
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.app.TaskStackBuilder
 import android.content.Context
 import android.content.DialogInterface
+import android.content.Intent
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
+import androidx.core.app.NotificationCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.gymaster.databinding.ActivityVentana1Binding
 import java.util.Calendar
@@ -22,6 +30,8 @@ import java.util.Calendar
 class Ventana1 : AppCompatActivity() {
 
     lateinit var binding: ActivityVentana1Binding
+    private val channelId = "channelId"
+    private val channelName = "notification"
 
     val positiveButtonClick = { dialog: DialogInterface, which: Int ->
     }
@@ -35,14 +45,14 @@ class Ventana1 : AppCompatActivity() {
         binding = ActivityVentana1Binding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val items = listOf("Press Banca", "Sentadilla", "Press Frontal", "Peso Muerto", "Prensa", "Remo en barra")
+        val items = listOf(getString(R.string.banca), getString(R.string.sentadilla), getString(R.string.frontal), getString(R.string.pesoMuerto), getString(R.string.prensa), getString(R.string.remo))
         val adapter = ArrayAdapter(this, R.layout.list_item, items)
         binding.edNombre.setAdapter(adapter)
 
         findViewById<AutoCompleteTextView>(R.id.edNombre).setAdapter(adapter)
 
         binding.toolbar1.title = "    GYMASTER"
-        binding.toolbar1.subtitle = "     AÑADIR EJERCICIOS"
+        binding.toolbar1.subtitle =     getString(R.string.addEjercicios)
         binding.toolbar1.setLogo(R.drawable.ic_addejer)
 
         //aquí simplemente inflo la toolBaar, pero aún no hay opciones ni botón home.
@@ -72,6 +82,7 @@ class Ventana1 : AppCompatActivity() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     fun addEjercicio(view: View) {
         if (binding.edNombre.text.toString().trim().isEmpty() || binding.edMaxpeso.text.toString().trim().isEmpty()
             || binding.edDate.text.toString().trim().isEmpty()){
@@ -98,6 +109,32 @@ class Ventana1 : AppCompatActivity() {
             //la L es por ser un Long lo que trae codigo.
             if(codigo!=-1L) {
                 Toast.makeText(this, "Ejercicio insertado", Toast.LENGTH_SHORT).show()
+                crearCanalNotificacion()
+
+                // Crear un PendingIntent para la acción al pulsar la notificación
+                val resultIntent = Intent(this, Home::class.java).apply {
+                    putExtra("email", intent.getStringExtra("email").toString())
+                    putExtra("provider", intent.getStringExtra("provider").toString())
+                    putExtra("nombre", intent.getStringExtra("nombre").toString())
+                }
+                val resultPendingIntent = TaskStackBuilder.create(this).run {
+                    addNextIntentWithParentStack(resultIntent)
+                    getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT)
+                }
+
+                val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                val notificationId = 1
+
+                val builder = NotificationCompat.Builder(this, channelId).also {
+                    it.setSmallIcon(R.drawable.ic_addejer)
+                    it.setContentTitle("¡Gracias por usar nuestra app!")
+                    it.setContentText("Ya está añadido su nuevo récord")
+                    it.setContentIntent(resultPendingIntent)
+                    it.setAutoCancel(true)
+                }.build()
+
+                notificationManager.notify(notificationId, builder)
+
                 //listarEjercicios(view)
                 binding.edNombre.setText("")
                 binding.edMaxpeso.setText("")
@@ -217,5 +254,14 @@ class Ventana1 : AppCompatActivity() {
 
         // Notifica al adaptador que los datos han cambiado
         miAdapter.notifyDataSetChanged()
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun crearCanalNotificacion() {
+        val importance = NotificationManager.IMPORTANCE_HIGH
+        val channel = NotificationChannel(channelId, channelName, importance)
+
+        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.createNotificationChannel(channel)
     }
 }

@@ -10,4 +10,21 @@
     <string name="textoRegistro">Si aún no tienes cuenta:         </string>
     <string name="registroUsuario">Registrar usuario</string>
     <string name="select">Elegir ejercicio</string>
+    <string name="ejerRecycler">No existen ejercicios registrados</string>
+    <string name="cerrar">Cerrar sesión</string>
+    <string name="btnConsultar">Consultar</string>
+    <string name="btnAñadir">Añadir</string>
+    <string name="btnModificar">Modificar</string>
+    <string name="kilos">Récord Personal (kg)</string>
+    <string name="fecha">Fecha</string>
+    <string name="addEjercicios">AÑADIR EJERCICIOS</string>
+    <string name="ajustesUsuario">AJUSTES DE USUARIO</string>
+    <string name="detallePulsar">Detalle</string>
+    <string name="borrarPulsar">Borrar</string>
+    <string name="banca">Press Banca</string>
+    <string name="sentadilla">Sentadilla</string>
+    <string name="frontal">Press Frontal</string>
+    <string name="pesoMuerto">Peso Muerto</string>
+    <string name="prensa">Prensa</string>
+    <string name="remo">Remo en barra</string>
 </resources>

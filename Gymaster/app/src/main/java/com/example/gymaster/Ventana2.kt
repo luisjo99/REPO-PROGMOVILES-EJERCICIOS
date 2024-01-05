@@ -42,7 +42,7 @@ class Ventana2 : AppCompatActivity() {
         firebaseauth = FirebaseAuth.getInstance()
 
         binding.toolbar1.title = "    GYMASTER"
-        binding.toolbar1.subtitle = "     AJUSTES DE USUARIO"
+        binding.toolbar1.subtitle = getString(R.string.ajustesUsuario)
         binding.toolbar1.setLogo(R.drawable.ic_settings)
 
         // aquí simplemente inflo la toolBaar, pero aún no hay opciones ni botón home.
@@ -65,22 +65,13 @@ class Ventana2 : AppCompatActivity() {
             val edadStr = binding.edEdad.text.toString()
 
             if (nombre.isNotEmpty() && edadStr.isNotEmpty()) {
-                val edad = edadStr.toInt()
-
-                // Determinar roles basados en la edad
-                val roles = if (edad >= 18) {
-                    arrayListOf("adulto") // Rol de adulto
-                } else {
-                    arrayListOf("menor") // Rol de menor
-                }
-
                 // Crear el mapa de usuario
                 val user = hashMapOf(
                     "provider" to binding.txtProveedor.text,
                     "email" to binding.txtEmail.text.toString(),
                     "name" to nombre,
                     "age" to edadStr,
-                    "roles" to roles,
+                    "roles" to arrayListOf("premium"),
                     "timestamp" to FieldValue.serverTimestamp()
                 )
 
@@ -99,34 +90,22 @@ class Ventana2 : AppCompatActivity() {
             }
         }
         binding.btRecuperar.setOnClickListener {
-            var roles: ArrayList<String>  // Cambié el tipo de roles a ArrayList<String>
-            // Búsqueda por id del documento.
+            var roles: ArrayList<String>
+
             db.collection("users")
                 .document(binding.txtEmail.text.toString())
                 .get()
                 .addOnSuccessListener { documentSnapshot ->
-                    // Si encuentra el documento será satisfactorio este listener y entraremos en él.
                     binding.edNombre.setText(documentSnapshot.get("name") as String?)
                     binding.edEdad.setText(documentSnapshot.get("age") as String?)
-                    roles = documentSnapshot.get("roles") as ArrayList<String>? ?: arrayListOf()
+                    roles = documentSnapshot.get("roles") as ArrayList<String>? ?: arrayListOf("normal")
 
                     if (roles.isNotEmpty()) {
+                        // El usuario tiene el rol "premium"
                         binding.txtRoles.text = roles.toString()
-
-                        // Verificar el rol y mostrar/ocultar elementos según sea necesario
-                        if (roles.contains("adulto")) {
-                            // Si el usuario es un adulto, permite la actualización de la contraseña
-                            binding.btnActualizarPass.visibility = Button.VISIBLE
-                            binding.edPassAntigua.visibility = View.VISIBLE
-                            binding.edPassNueva.visibility = View.VISIBLE
-                        } else {
-                            // Si el usuario es menor, oculta los elementos relacionados con la contraseña
-                            binding.btnActualizarPass.visibility = Button.INVISIBLE
-                            binding.edPassAntigua.visibility = View.INVISIBLE
-                            binding.edPassNueva.visibility = View.INVISIBLE
-                        }
                     } else {
-                        Log.e(TAG, "Sin roles")
+                        // El usuario no tiene el rol "premium"
+                        Log.e(TAG, "Sin rol premium")
                         binding.txtRoles.text = "SIN ROLES"
                     }
 
